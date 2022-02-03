@@ -1,0 +1,38 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://assets/015_BlankCard.png" type="Texture" id=2]
+[ext_resource path="res://assets/015_BlankCard_Back.png" type="Texture" id=3]
+
+[node name="CardBase" type="MarginContainer"]
+anchor_right = 0.089
+anchor_bottom = 0.244
+margin_right = 0.119995
+margin_bottom = 0.47998
+rect_pivot_offset = Vector2( 85.5, 132 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Card" type="Sprite" parent="."]
+scale = Vector2( 0.25, 0.25 )
+texture = ExtResource( 2 )
+centered = false
+
+[node name="Border" type="Sprite" parent="."]
+
+[node name="Name" type="Label" parent="."]
+self_modulate = Color( 0, 0, 0, 1 )
+margin_top = 124.0
+margin_right = 171.0
+margin_bottom = 138.0
+align = 1
+
+[node name="CardBack" type="Sprite" parent="."]
+visible = false
+scale = Vector2( 0.25, 0.25 )
+texture = ExtResource( 3 )
+centered = false
+
+[node name="Draw" type="Tween" parent="."]
+
+[node name="Hover" type="Tween" parent="."]

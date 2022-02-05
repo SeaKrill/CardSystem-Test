@@ -31,7 +31,6 @@ func drawPlayerCard(delta):
 	deckSize -= 1
 	if deckSize == 0:
 		$PlayerDeck.disabled = true
-#	moveCard($PlayerHand.get_child_count() - 1)
 
 	
 func _on_CardEntered(cardNum, delta):
@@ -78,17 +77,3 @@ func _on_CardExited(cardNum, delta):
 		tweenHover.start()
 		mouseCheck = false
 
-#func moveCard(cardNum):
-#	if cardNum > 0:
-#		var Card = $PlayerHand.get_child(cardNum - 1)
-#		if Card.get_node("Draw").is_active() == true:
-#			yield(Card.get_node("Draw"), "tween_all_completed")
-#			Card.rect_position -= Vector2(Card.rect_size.x/2,0)
-#		else:
-#			Card.rect_position -= Vector2(Card.rect_size.x/2,0)
-			
-			#try to use groups to move all cards at the same time?
-			# get_tree().call_group("Cards", rect.position, Vector2(rect.position.x + 100, 0)?
-			# get_tree().call_group("Cards", "Move function", param?
-			
-			#figure out way to set a standard y point that they return to when not hovered.

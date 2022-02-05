@@ -5,34 +5,40 @@ const PlayerDeck = preload("res://Card/PlayerDeck.gd")
 
 onready var CenterHand = get_viewport().get_visible_rect().size/2 - Vector2(CardOffset.x/2,0) + Vector2(0,CardOffset.y * 1.5)
 onready var mouseCheck = false
-onready var deckSize = 5
-
+onready var deckSize = 15
 
 var CardOffset = Vector2(171,264)
+var inHand = 1
 
 func _ready():
 	pass
-
-func _on_PlayerDeck_pressed():
-	drawPlayerCard(1)
 	
-func drawPlayerCard(delta):
+func _on_PlayerDeck_pressed():
 	var new_card = CardBase.instance()
 	var tweenDraw = new_card.get_node("Draw")
-	$PlayerHand.add_child(new_card)
+	if $PlayerHand.get_child_count() > 0:
+		inHand = $PlayerHand.get_child_count()
+	$PlayerHand.add_child(new_card)	
+	for i in range(inHand):
+		var Card = $PlayerHand.get_child(i)
+		var CardPos = Card.rect_position.x - Card.rect_size.x/6
+		tweenDraw.interpolate_property(
+		Card, "rect_position", 
+		Card.rect_position, Vector2(CardPos, CenterHand.y), 0, 
+		Tween.TRANS_QUINT, Tween.EASE_OUT)
+		tweenDraw.start()
 	new_card.connect("mouse_entered", self, "_on_CardEntered", [$PlayerHand.get_child_count() - 1, 1])
 	new_card.connect("mouse_exited", self, "_on_CardExited", [$PlayerHand.get_child_count() - 1, 1])
 	tweenDraw.interpolate_property(
 		new_card, "rect_position", 
-		$PlayerDeck.rect_position, CenterHand, 1.0 * delta, 
+		$PlayerDeck.rect_position, CenterHand, 0, 
 		Tween.TRANS_QUINT, Tween.EASE_OUT)
 	tweenDraw.start()
-	CenterHand += Vector2(new_card.rect_size.x/2,0)
+	CenterHand += Vector2(new_card.rect_size.x/6,0)
 	deckSize -= 1
 	if deckSize == 0:
 		$PlayerDeck.disabled = true
-
-	
+		
 func _on_CardEntered(cardNum, delta):
 	var Count = $PlayerHand.get_child_count()
 	var Card = $PlayerHand.get_child(cardNum)
@@ -76,4 +82,4 @@ func _on_CardExited(cardNum, delta):
 			Tween.TRANS_QUINT, Tween.EASE_IN_OUT)
 		tweenHover.start()
 		mouseCheck = false
-
+		

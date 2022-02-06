@@ -2,13 +2,14 @@ extends Node
 
 const CardBase = preload("res://Card/CardBase.tscn")
 const PlayerDeck = preload("res://Card/PlayerDeck.gd")
+const HandBase = Vector2(902.97998, 936)
 
 onready var CenterHand = get_viewport().get_visible_rect().size/2 - Vector2(CardOffset.x/2,0) + Vector2(0,CardOffset.y * 1.5)
 onready var mouseCheck = false
 onready var deckSize = 15
 
 var CardOffset = Vector2(171,264)
-var inHand = 1
+var inHand = 0
 
 func _ready():
 	pass
@@ -18,23 +19,23 @@ func _on_PlayerDeck_pressed():
 	var tweenDraw = new_card.get_node("Draw")
 	if $PlayerHand.get_child_count() > 0:
 		inHand = $PlayerHand.get_child_count()
-	$PlayerHand.add_child(new_card)	
 	for i in range(inHand):
 		var Card = $PlayerHand.get_child(i)
-		var CardPos = Card.rect_position.x - Card.rect_size.x/6
-		tweenDraw.interpolate_property(
-		Card, "rect_position", 
-		Card.rect_position, Vector2(CardPos, CenterHand.y), 0, 
+		
+		#Stuck here
+		var cardPos = (CenterHand.x + (i * (CardOffset.x/2)))
+		
+		tweenDraw.interpolate_property(Card, "rect_position", 
+		Card.rect_position, Vector2(cardPos, CenterHand.y), 1.0, 
 		Tween.TRANS_QUINT, Tween.EASE_OUT)
-		tweenDraw.start()
+	$PlayerHand.add_child(new_card)	
 	new_card.connect("mouse_entered", self, "_on_CardEntered", [$PlayerHand.get_child_count() - 1, 1])
 	new_card.connect("mouse_exited", self, "_on_CardExited", [$PlayerHand.get_child_count() - 1, 1])
 	tweenDraw.interpolate_property(
 		new_card, "rect_position", 
-		$PlayerDeck.rect_position, CenterHand, 0, 
+		$PlayerDeck.rect_position, Vector2(CenterHand.x + (inHand * (CardOffset.x/2)), CenterHand.y), 1.0, 
 		Tween.TRANS_QUINT, Tween.EASE_OUT)
 	tweenDraw.start()
-	CenterHand += Vector2(new_card.rect_size.x/6,0)
 	deckSize -= 1
 	if deckSize == 0:
 		$PlayerDeck.disabled = true

@@ -21,12 +21,11 @@ func _on_PlayerDeck_pressed():
 		inHand = $PlayerHand.get_child_count()
 	for i in range(inHand):
 		var Card = $PlayerHand.get_child(i)
-		
-		#Stuck here
-		var cardPos = (CenterHand.x + (i * (CardOffset.x/2)))
+		var startPos = $PlayerHand.get_child(i).get_position()
+		var endPos = Vector2(CenterHand.x + (i * (CardOffset.x/2)), CenterHand.y)
 		
 		tweenDraw.interpolate_property(Card, "rect_position", 
-		Card.rect_position, Vector2(cardPos, CenterHand.y), 1.0, 
+		startPos, endPos, 1.0, 
 		Tween.TRANS_QUINT, Tween.EASE_OUT)
 	$PlayerHand.add_child(new_card)	
 	new_card.connect("mouse_entered", self, "_on_CardEntered", [$PlayerHand.get_child_count() - 1, 1])

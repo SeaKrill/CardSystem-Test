@@ -2,14 +2,13 @@ extends Node
 
 const CardBase = preload("res://Card/CardBase.tscn")
 const PlayerDeck = preload("res://Card/PlayerDeck.gd")
-const HandBase = Vector2(902.97998, 936)
 
 onready var CenterHand = get_viewport().get_visible_rect().size/2 - Vector2(CardOffset.x/2,0) + Vector2(0,CardOffset.y * 1.5)
 onready var mouseCheck = false
 onready var deckSize = 15
 
 var CardOffset = Vector2(171,264)
-var inHand = 0
+var cardMargin = CardOffset.x/2
 
 func _ready():
 	pass

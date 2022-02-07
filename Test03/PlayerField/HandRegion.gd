@@ -15,26 +15,30 @@ func _ready():
 	pass
 	
 func _on_PlayerDeck_pressed():
+	
 	var new_card = CardBase.instance()
 	var tweenDraw = new_card.get_node("Draw")
 	var cardsInHand = $PlayerHand.get_child_count()
-	
-	var centerOfCards = ($PlayerHand.get_child_count() * cardMargin - new_card.rect_size.x/2)/2
+	var centerOfCards = ($PlayerHand.get_child_count() * cardMargin - new_card.rect_size.x)/2
 	
 	for i in cardsInHand:
 		var Card = $PlayerHand.get_child(i)
 		tweenDraw.interpolate_property(
 			Card, "rect_position", 
-			Card.rect_position, Vector2(CenterHand.x - centerOfCards + i * cardMargin,CenterHand.y), 
+			Card.rect_position, Vector2(CenterHand.x - centerOfCards + i * cardMargin, CenterHand.y), 
 			1.0, Tween.TRANS_QUINT, Tween.EASE_OUT)
-	$PlayerHand.add_child(new_card)		
+			
+	$PlayerHand.add_child(new_card)	
+	
 	new_card.connect("mouse_entered", self, "_on_CardEntered", [$PlayerHand.get_child_count() - 1, 1])
 	new_card.connect("mouse_exited", self, "_on_CardExited", [$PlayerHand.get_child_count() - 1, 1])
+	
 	tweenDraw.interpolate_property(
 		new_card, "rect_position", 
 		$PlayerDeck.rect_position, Vector2(CenterHand.x - centerOfCards + cardsInHand * cardMargin, CenterHand.y), 
 		1.0, Tween.TRANS_QUINT, Tween.EASE_OUT)
 	tweenDraw.start()
+	
 	deckSize -= 1
 	if deckSize == 0:
 		$PlayerDeck.disabled = true
